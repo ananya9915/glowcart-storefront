@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A responsive affiliate storefront featuring curated products, category filters, and search."
+    />
+    <title>GlowCart | Affiliate Picks</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=DM+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <nav class="topbar">
+          <a class="brand" href="#products">GlowCart</a>
+          <button
+            id="theme-toggle"
+            class="theme-toggle"
+            type="button"
+            aria-label="Toggle dark mode"
+          >
+            <span class="theme-toggle__icon" aria-hidden="true">◐</span>
+            <span class="theme-toggle__text">Theme</span>
+          </button>
+        </nav>
+
+        <div class="hero__content">
+          <p class="eyebrow">Curated affiliate picks</p>
+          <h1>Shop elevated everyday finds curated for modern living.</h1>
+          <p class="hero__copy">
+            Discover standout home, fashion, and tech favorites in a polished
+            storefront designed to feel fast, effortless, and inspiring.
+          </p>
+          <div class="hero__meta">
+            <span>Trending Picks</span>
+            <span>Fresh Categories</span>
+            <span>Instant Shop Links</span>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="controls sticky-controls" aria-label="Product controls">
+          <div class="search-wrap">
+            <label class="sr-only" for="search-input">Search products</label>
+            <input
+              id="search-input"
+              class="search-input"
+              type="search"
+              placeholder="Search by title..."
+              autocomplete="off"
+            />
+          </div>
+
+          <div
+            id="category-filters"
+            class="filter-group"
+            role="toolbar"
+            aria-label="Category filters"
+          ></div>
+        </section>
+
+        <section class="status-area" aria-live="polite">
+          <div id="loader" class="loader" hidden>
+            <div class="spinner" aria-hidden="true"></div>
+            <p>Loading products...</p>
+          </div>
+
+          <div id="error-message" class="message message--error" hidden></div>
+          <div id="preview-helper" class="message message--info" hidden>
+            <p id="preview-helper-copy">
+              Local file preview detected. Load your
+              <code>products.json</code> file to preview updates instantly.
+            </p>
+            <div class="message__actions">
+              <button id="load-json-button" class="action-button" type="button">
+                Load products.json
+              </button>
+              <input
+                id="local-json-input"
+                type="file"
+                accept="application/json,.json"
+                hidden
+              />
+            </div>
+          </div>
+          <div id="empty-state" class="message message--empty" hidden></div>
+        </section>
+
+        <section class="products-section" id="products">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Featured picks</p>
+              <h2>Browse products by vibe, category, or name.</h2>
+            </div>
+            <p id="results-count" class="results-count">0 products</p>
+          </div>
+
+          <div id="product-grid" class="product-grid" aria-live="polite"></div>
+        </section>
+
+      </main>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
