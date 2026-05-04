@@ -298,7 +298,7 @@ async function fetchProducts() {
   setPreviewHelper(false);
 
   try {
-    const response = await fetch(PRODUCTS_JSON_URL, {
+    const response = await fetch(`${PRODUCTS_JSON_URL}?v=${Date.now()}`, {
       method: "GET",
       cache: "no-store",
       headers: {
