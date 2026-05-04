@@ -1,4 +1,5 @@
 const PRODUCTS_JSON_URL = "./products.json";
+const METADATA_API_URL = "https://api.microlink.io?url=";
 const THEME_STORAGE_KEY = "glowcart-theme";
 const LOCAL_PREVIEW_CACHE_KEY = "glowcart-products-cache";
 
@@ -78,6 +79,52 @@ function parseProductsPayload(payload) {
       : [];
 
   return source.map(normalizeProduct).filter((product) => product.title);
+}
+
+async function enrichProductsFromLinks(products) {
+  const enrichedProducts = await Promise.all(
+    products.map(async (product) => {
+      const safeLink = getSafeLink(product.link);
+      const needsMetadata = !product.image;
+
+      if (!needsMetadata || safeLink === "#") {
+        return product;
+      }
+
+      try {
+        const response = await fetch(
+          `${METADATA_API_URL}${encodeURIComponent(safeLink)}`,
+          {
+            headers: {
+              Accept: "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          return product;
+        }
+
+        const payload = await response.json();
+        const metadata = payload?.data || {};
+
+        return {
+          ...product,
+          image:
+            product.image ||
+            metadata.image?.url ||
+            metadata.image?.secure_url ||
+            metadata.logo?.url ||
+            "",
+        };
+      } catch (error) {
+        console.warn("Metadata enrichment failed for:", product.link, error);
+        return product;
+      }
+    })
+  );
+
+  return enrichedProducts;
 }
 
 function setLoading(isLoading) {
@@ -272,7 +319,8 @@ async function fetchProducts() {
     }
 
     const sanitizedProducts = parseProductsPayload(data);
-    renderProducts(sanitizedProducts);
+    const enrichedProducts = await enrichProductsFromLinks(sanitizedProducts);
+    renderProducts(enrichedProducts);
   } catch (error) {
     console.error("Product fetch failed:", error);
 
